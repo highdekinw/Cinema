@@ -1,0 +1,256 @@
+<%= render 'element/header' %>
+<div class="container">
+	<h1>Ticket Confirm & Payment</h1>
+	<div class="row">
+		<div class="col s6">
+			<h5 class="right">Total Price : <b id="total-price"><%= @vatPrice*@seating["coord"].length %></b> Baht
+				<span style="font-size: 13px">  vat 7% </span>
+			</h5>
+		</div>
+		<div class="col s6 input-field">
+			<form>
+				<input type="number" id="recieve">
+				<label for="recieve">Recieve</label>
+			</form>
+		</div>
+		<div class="col s12">
+			<button id="trigger" data-target="modal1" class="btn right grey darken-3"><i class="fa fa-angle-right right" aria-hidden="true"></i>
+Confirm</button>
+			<%= link_to '<i class="fa fa-angle-left left" aria-hidden="true"></i> BACK'.html_safe, new_movie_schedule_seat_path(@movie,@schedule), :class => 'btn btn-flat left' %>
+		</div>
+	</div>
+	<div class="row">
+		<table class="centered">
+			<thead>
+				<tr>
+					<th>Movie Name</th>
+					<th><i class="fa fa-clock-o" aria-hidden="true"></i></th>
+					<th>Start Date&Time</th>
+					<th>Seat</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% for i in 0...@seating["coord"].length do %>
+				<tr>
+					<td><%= @movie.name %></td>
+					<td><%= @movie.time %> Minute</td>
+					<td><%= @schedule.stime.strftime('%d/%m/%Y %T') %></td>
+					<td><%= @seatX[i].to_i.chr %> <%= @seatY[i] %></td>
+					<td><%= @vatPrice %></td>
+				</tr>
+			<% end %>
+			</tbody>
+		</table>
+	</div>
+	<div id="modal1" class="modal modal-fixed-footer grey lighten-4">
+    <div class="modal-content">
+      <h4>Confirmation & Payment</h4>
+      <p>Movie : <b><%= @movie.name %></b></p>
+      <p>Seat : <b>
+      	<% for i in 0...@seating["coord"].length do %>
+      		<%= @seatX[i].to_i.chr %><%= @seatY[i] %>
+      		<% if i<@seating["coord"].length-1  %>
+      			, 
+      		<% end %>
+      	<% end %>
+      </b></p>
+      <p>Total Price : <b><%= @vatPrice*@seating["coord"].length %></b> Baht ( vat 7% )</p>
+      <p id="recieve-text">Recieve : </p>
+      <p id="change-text">Change : </p>
+      <div class="collapsible" data-collapsible="accordion">
+      	<div class="collapsible-header center"><b>Change Table</b></div>
+      <div class="callapsible-body">
+      <table id='change-table' class="centered">
+      	<thead>
+      		<tr>
+	      		<th>Coin, Bank</th>
+	      		<th>Quantity</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+      		<tr>
+      			<td>1000</td>
+      			<td id="q-100000">-</td>
+      		</tr>
+      		<tr>
+      			<td>500</td>
+      			<td id="q-50000">-</td>
+      		</tr>
+      		<tr>
+      			<td>100</td>
+      			<td id="q-10000">-</td>
+      		</tr>
+      		<tr>
+      			<td>50</td>
+      			<td id="q-5000">-</td>
+      		</tr>
+      		<tr>
+      			<td>20</td>
+      			<td id="q-2000">-</td>
+      		</tr>
+      		<tr>
+      			<td>10</td>
+      			<td id="q-1000">-</td>
+      		</tr>
+      		<tr>
+      			<td>5</td>
+      			<td id="q-500">-</td>
+      		</tr>
+      		<tr>
+      			<td>2</td>
+      			<td id="q-200">-</td>
+      		</tr>
+      		<tr>
+      			<td>1</td>
+      			<td id="q-100">-</td>
+      		</tr>
+      		<tr>
+      			<td>0.5</td>
+      			<td id="q-50">-</td>
+      		</tr>
+      		<tr>
+      			<td>0.25</td>
+      			<td id="q-25">-</td>
+      		</tr>
+      	</tbody>
+      </table>
+      </div>
+      </div>  
+    </div>
+    <div class="modal-footer grey lighten-2">
+      <!--a href="#!" id="confirm-btn" class="modal-action modal-close waves-effect waves-green btn-flat">Confirm</a-->
+      	<%= form_for :seating, url: movie_schedule_seats_path(@movie, @schedule) do |f| %>
+      		<% for i in 0...@seating["coord"].length do %>
+				<%= hidden_field_tag 'coord[]', @seating["coord"][i] %>
+			<% end %>
+			<button type='submit' class='btn grey darken-3 ' id='confirm-btn' %><i class="fa fa-chevron-circle-right right" aria-hidden="true"></i>Confirm</button>
+		<% end %>
+
+    </div>
+  </div>
+</div>
+
+<script>
+	$('.modal').modal();
+	//$('#change-table').hide();
+	$('.collapsible').hide();
+	$('#trigger').click(function(){
+		$('#q-100000').text('-');
+		$('#q-50000').text('-');
+		$('#q-10000').text('-');
+		$('#q-5000').text('-');
+		$('#q-2000').text('-');
+		$('#q-1000').text('-');
+		$('#q-500').text('-');
+		$('#q-200').text('-');
+		$('#q-100').text('-');
+		$('#q-50').text('-');
+		$('#q-25').text('-');
+		var money = change = (Number($('#recieve').val())-Number($('#total-price').text())).toFixed(2);
+		$('#change-text').html('Change : <b>'+ change + '</b> Baht');
+		if($('#recieve').val() == '' || change < 0){
+			$('#confirm-btn').hide();
+			$('#recieve-text').text('Recieve : No Recieve or Fewer than total price');
+			$('#change-text').text('Change : No Recieve or Fewer than total price');
+			//$('#change-table').hide()
+			$('.collapsible').hide();
+		}else {
+			$('#confirm-btn').show();
+			$('#recieve-text').html('Recieve : <b>'+ $('#recieve').val()  + '</b> Baht');
+			//$('#change-table').show()
+			$('.collapsible').show();
+
+			if(money >= 1000){
+				var temp = Math.floor(money/1000);
+				$('#q-100000').text( temp );
+				$('#q-100000').parent().show();
+				money -= temp * 1000;
+			}else{
+				$('#q-100000').parent().hide();
+			}
+			if(money >= 500){
+				var temp = Math.floor(money/500);
+				$('#q-50000').text( temp );
+				$('#q-50000').parent().show();
+				money -= temp * 500;
+			}else{
+				$('#q-50000').parent().hide();
+			}
+			if(money >= 100){
+				var temp = Math.floor(money/100);
+				$('#q-10000').text( temp );
+				$('#q-10000').parent().show()
+				money -= temp * 100;
+			}else{
+				$('#q-10000').parent().hide();
+			}
+			if(money >= 50){
+				var temp = Math.floor(money/50);
+				$('#q-5000').text( temp );
+				$('#q-5000').parent().show();
+				money -= temp * 50;
+			}else{
+				$('#q-5000').parent().hide();
+			}
+			if(money >= 20){
+				var temp = Math.floor(money/20);
+				$('#q-2000').text( temp );
+				$('#q-2000').parent().show();
+				money -= temp * 20;
+			}else{
+				$('#q-2000').parent().hide();
+			}
+			if(money >= 10){
+				var temp = Math.floor(money/10);
+				$('#q-1000').text( temp );
+				$('#q-1000').parent().show();
+				money -= temp * 10;
+			}else{
+				$('#q-1000').parent().hide();
+			}
+			if(money >= 5){
+				var temp = Math.floor(money/5);
+				$('#q-500').text( temp );
+				$('#q-500').parent().show();
+				money -= temp * 5;
+			}else{
+				$('#q-500').parent().hide();
+			}
+			if(money >= 2){
+				var temp = Math.floor(money/2);
+				$('#q-200').text( temp );
+				$('#q-200').parent().show();
+				money -= temp * 2;
+			}else{
+				$('#q-200').parent().hide();
+			}
+			if(money >= 1){
+				var temp = Math.floor(money/1);
+				$('#q-100').text( temp );
+				$('#q-100').parent().show();
+				money -= temp * 1;
+			}else{
+				$('#q-100').parent().hide();
+			}
+			if(money >= 0.5){
+				var temp = Math.floor(money/0.5);
+				$('#q-50').text( temp );
+				$('#q-50').parent().show();
+				money -= temp * 0.5;
+			}else{
+				$('#q-50').parent().hide();
+			}
+			if(money >= 0.25){
+				var temp = Math.floor(money/0.25);
+				$('#q-25').text( temp );
+				$('#q-25').parent().show();
+				money -= temp * 0.25;
+			}else{
+				$('#q-25').parent().hide();
+			}
+		}
+		
+	});
+</script>
+<%= render 'element/footer' %>

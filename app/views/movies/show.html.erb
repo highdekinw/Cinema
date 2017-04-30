@@ -1,0 +1,34 @@
+<%= render 'element/header' %>
+<div class="container">
+	<h1 class="center">Movie Detail</h1>
+	<div class="row">
+		<div class="col s12 card grey darken-2 grey-text text-lighten-2">
+			<div class="card-content">
+			<p><strong>Movie Name</strong> : <b><%= @movie.name %></b></p>
+			<p><i class="fa fa-clock-o" aria-hidden="true"></i> : <%= @movie.time %> Minute<br></p>
+			<p><strong>Description</strong> : <%= @movie.desc %></p>
+			</div>
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col s12">
+			<%= link_to '<i class="fa fa-angle-left left" aria-hidden="true"></i>BACK'.html_safe, root_path, :class => 'waves-effect waves-light btn btn-flat left' %>
+			<%= link_to '<i class="fa fa-plus left" aria-hidden="true"></i>ADD SCHEDULE'.html_safe, new_movie_schedule_path(@movie), :class => 'waves-effect waves-light btn right grey darken-3 light-green-text text-darken-1' %>
+		</div>
+		<div class="col s12 card-content">
+			<table class="centered">
+				<thead>
+					<tr>
+						<th>Started at</th>
+						<th>Price</th>
+						<th colspan="2"></th>
+					<tr>
+				</tr>
+				<tbody>
+					<%= render @movie.schedules %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<%= render 'element/footer' %>

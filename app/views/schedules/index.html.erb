@@ -1,0 +1,9 @@
+<table>
+<% @schedules.each do |sch| %>
+	<tr>
+		<td><%= sch.movie %></td>
+		<td><%= sch.stime %></td>
+		<td><%= sch.price %></td>
+	</tr>
+<% end %>
+</table>

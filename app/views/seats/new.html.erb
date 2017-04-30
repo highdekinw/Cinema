@@ -1,0 +1,67 @@
+<%= render 'element/header' %>
+<% array = [] %>
+<div class="container">
+	<h1 class="center">Seat Selection</h1>
+	<div class="row">
+		<div class="col s12">
+			<%= form_for :seating, url: confirm_movie_schedule_seats_path(@movie,@schedule) do |f| %>
+				<table class="centered">
+				<thead>
+				<tr>
+					<th colspan='8'>
+						<h5 class="grey darken-3 grey-text text-lighten-4">Screen</h5>
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<% for i in 65...72 do %>
+					<% array[i] = []%>
+					<tr>
+					<% for j in 1...9 do %>
+						<td>
+							<% array[i][j] = (i+j)%2 %>
+							<%= check_box_tag 'coord[]', i.to_s+'-'+j.to_s, false, :id => i.chr+j.to_s %>
+							<%= label_tag  i.chr+j.to_s, i.chr+'-'+j.to_s %>
+							&nbsp;&nbsp;
+						</td>
+					<% end %>
+					</tr>
+				<% end %>
+				</tbody>
+				</table>
+				<%= link_to '<i class="fa fa-angle-left left" aria-hidden="true"></i>BACK'.html_safe, movie_path(@movie), :class => 'btn btn-flat left' %>
+				<button type='submit' class='btn right grey darken-3' id='submit'><i class="fa fa-angle-right right"></i>Next</button>
+			<% end %>
+		</div>
+		<div class="col s12 hidden">
+			<ul id='js-parse'>
+			<% @seats.each do |s| %>
+				<li data-x="<%= s.x.to_i.chr %>" data-y="<%= s.y %>"></li>
+			<% end %>
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+	$('#submit').hide();
+	$('#js-parse').children('li').each(function(i,o){
+		var x = $(o).attr("data-x");
+		var y = $(o).attr("data-y");
+		$('#'+ x + y).attr("disabled", true);
+	});
+	$('form').click(function(){
+		if($('input:checked').length < 1 ){
+			$('#submit').hide();
+		}else{
+			$('#submit').show();
+		}
+	});
+</script>
+<%= render 'element/footer' %>
+<!--
+K O R W A
+O
+R
+W
+A
+-->

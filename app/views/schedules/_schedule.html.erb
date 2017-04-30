@@ -1,0 +1,9 @@
+<tr>	
+	<td><%= schedule.stime.strftime('%d/%m/%Y %T') %></td>
+	<td><%= schedule.price.round(2) %></td>
+	<td>
+		<%= link_to 'TICKETING<i class="fa fa-chevron-circle-right right" aria-hidden="true"></i>'.html_safe, new_movie_schedule_seat_path(schedule.movie,schedule), :class => 'btn waves-effect waves-light grey darken-3 lime-text text-accent-2' %></td><td>
+		<%= link_to '<i class="fa fa-pencil" aria-hidden="true"></i>'.html_safe, edit_movie_schedule_path(schedule.movie, schedule), :class => 'btn waves-effect waves-light grey darken-3 orange-text text-lighten-2' %>
+		<%= link_to '<i class="fa fa-trash-o" aria-hidden="true"></i>'.html_safe, [schedule.movie, schedule], method: :delete, data: { confirm: 'Are you sure?'}, :class => 'waves-effect waves-light btn grey darken-3 red-text text-lighten-1' %>
+	</td>
+</tr>

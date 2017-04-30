@@ -1,0 +1,12 @@
+<%= render 'element/header' %>
+<div class="container">
+	<h1 class='center'>Add New Schedule</h1>
+	<% if @schedule.errors.any? %>
+		<% @schedule.errors.full_messages.each do |msg| %>
+			<%= msg %>
+		<% end %>
+	<% end %>
+	<%= render 'form' %>
+</div>
+
+<%= render 'element/footer' %>

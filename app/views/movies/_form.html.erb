@@ -1,0 +1,26 @@
+<%= form_for @movie do |f| %>
+<div class="row">
+	<div class="input-field col s12">
+		<%= f.label :name, 'MOVIE NAME'.html_safe %>
+		<%= f.text_field :name %>
+	</div>
+	<div class="input-field col s12">
+		<br>
+		<i class="fa fa-clock-o prefix" aria-hidden="true"></i>
+		<%= f.label :time, 'Duration (in minute)' %>
+		<%= f.number_field :time %>
+	</div>
+	<div class="input-field col s12">
+		<i class="fa fa-pencil prefix" aria-hidden="true"></i>
+		<%= f.label :desc, 'Description'.html_safe %>
+		<%= f.text_area :desc , :class => 'materialize-textarea' %>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<button type="submit" class='btn right grey darken-3 waves-effect waves-light'>SAVE<i class="fa fa-chevron-circle-right right" aria-hidden="true"></i></button>
+		<%= link_to '<i class="fa fa-angle-left left" aria-hidden="true"></i>
+BACK'.html_safe, movies_path, :class => 'btn waves-effect waves-teal btn-flat left' %>
+	</div>
+</div>
+<% end %>

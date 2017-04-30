@@ -1,0 +1,35 @@
+<%= render 'element/header' %>
+<div class="container">
+	<h1 class="center">Movie Management</h1>
+	<div class="row">
+		<div class="col s12">
+			<%= link_to '<i class="fa fa-angle-left left" aria-hidden="true"></i>BACK'.html_safe, root_path, :class => 'waves-effect waves-light btn btn-flat left' %>
+			<%= link_to '<i class="fa fa-plus left" aria-hidden="true"></i> ADD'.html_safe, new_movie_path, :class => 'waves-effect waves-light btn right grey darken-3 light-green-text text-darken-1' %>
+		</div>
+		<div class="col s12">
+			<table class="centered">
+				<thead>
+					<tr>
+						<th>Movie Name</th>
+						<th>Duration (minute)</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @movies.each do |movie| %>
+						<tr>
+							<td><strong><%= movie.name %></strong></td>
+							<td><%= movie.time %></td>
+							<td>
+								<%= link_to '<i class="fa fa-info-circle left" aria-hidden="true"></i>Detail'.html_safe, movie_path(movie), :class => 'waves-effect waves-light btn grey darken-3 orange-text text-lighten-2' %>
+								<%= link_to '<i class="fa fa-pencil" aria-hidden="true"></i>'.html_safe, edit_movie_path(movie), :class => 'waves-effect waves-light btn grey darken-3 orange-text text-lighten-2' %>
+								<%= link_to '<i class="fa fa-trash-o" aria-hidden="true"></i>'.html_safe, movie_path(movie), method: :delete, data: { confirm: 'Are you sure?' }, :class => 'waves-effect waves-light btn grey darken-3 red-text text-lighten-1' %>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<%= render 'element/footer' %>
